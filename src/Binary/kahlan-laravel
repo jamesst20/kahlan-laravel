@@ -1,0 +1,47 @@
+#!/usr/bin/env php
+<?php
+
+use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Console\Output\ConsoleOutput;
+
+define('LARAVEL_START', microtime(true));
+
+/*
+|--------------------------------------------------------------------------
+| Register The Auto Loader (Composer automatically generated class loader)
+|--------------------------------------------------------------------------
+*/
+require './vendor/autoload.php';
+
+$app = require_once './bootstrap/app.php';
+
+if (file_exists("{$app->environmentPath()}/.env.testing")) {
+    $app->loadEnvironmentFrom('.env.testing');
+} else if (file_exists("{$app->environmentPath()}/.env.kahlan")) {
+    $app->loadEnvironmentFrom('.env.kahlan');
+} else {
+    (new ConsoleOutput())->writeln("<bg=red>Error: Test environment files are not defined. Either use .env.testing or .env.kahlan.</>");
+    exit(0);
+}
+
+/*
+|--------------------------------------------------------------------------
+| Run The Artisan Application
+|--------------------------------------------------------------------------
+*/
+
+$argv = $_SERVER['argv'];
+array_splice($argv, 1, 0, array("kahlan:run"));
+
+$kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
+$status = $kernel->handle($input = new ArgvInput($argv), new ConsoleOutput());
+
+/*
+|--------------------------------------------------------------------------
+| Shutdown The Application
+|--------------------------------------------------------------------------
+*/
+
+$kernel->terminate($input, $status);
+
+exit($status);

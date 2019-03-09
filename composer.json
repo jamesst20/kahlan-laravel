@@ -1,0 +1,35 @@
+{
+    "name": "jamesst20/kahlan-laravel",
+    "description": "Kahlan support for Laravel",
+    "keywords": [
+        "laravel",
+        "testing"
+    ],
+    "authors": [
+        {
+            "name": "James St-Pierre",
+            "email": "Jamesst20@gmail.com"
+        }
+    ],
+    "bin": ["src/Binary/kahlan-laravel"],
+    "require": {
+        "php": "^7.1.3",
+        "laravel/framework": "~5.8.0",
+        "kahlan/kahlan": "^4.5"
+    },
+    "require-dev": {},
+    "autoload": {
+        "psr-4": {
+            "Jamesst20\\KahlanLaravel\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Jamesst20\\KahlanLaravel\\KahlanLaravelServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
