@@ -18,7 +18,7 @@ In a vanilla Laravel TestCase, we can access helpers by doing `$this->insertHelp
 
 In a kahlan environment, it is as simple as prefixing the method with `$this->laravel->insertHelperMethod`.
 
-Please note that `$this->laravel`and `$this->app` is not accessible in `beforeAll`, `afterAll`, `afterAll(yet)` callback but is in `beforeEach`.
+Please note that `$this->laravel`and `$this->app` is not accessible in `beforeAll`, `afterAll`, `afterEach(yet)` callback but is as soon as in `beforeEach`.
 
 ## Example
 
@@ -99,7 +99,7 @@ Environment variables are read in `.env.testing` and are also overriden by `.env
 
 During initialization, before Kahlan is even loaded, if `.env.testing` exists, only this file is loaded. `.env.kahlan` is loaded a little later and will override `.env.testing` variables in case of collisions.
 
-Please note that kahlan will raise an error if it is not executing in the testing environment.
+Please note that kahlan will raise an error if it is not executed in the testing environment.
 
 ## Executing
 
@@ -118,7 +118,7 @@ vendor/bin/kahlan-laravel
 
 The difference between the 2 is that the binary will automatically read the `APP_ENV` from `.env.testing` or `.env.kahlan` before bootstraping.
 
-Due to the current implementation of Laravel, there is no clean way to avoid the need to specify the APP_ENV=testing before the Artisan command. Laravel automatically loads `.env` if `APP_ENV` is undefined, otherwise `.env.{environment}`. While it would be possible to override `.env`, with the testing ones, there could be some production variables that have no override candidate in the testing environment files.
+Due to the current implementation of Laravel, there is no clean way to avoid the need to specify the APP_ENV=testing before the Artisan command. Laravel automatically loads `.env` if `APP_ENV` is undefined, otherwise `.env.{environment}`. While it would be possible to override `.env` with the testing ones, there could be some production variables that have no override candidate in the testing environment files.
 
 ## What is missing
 
