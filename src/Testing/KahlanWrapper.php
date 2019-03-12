@@ -9,6 +9,7 @@ use Dotenv\Dotenv;
 use Kahlan\Suite;
 use Kahlan\Cli\Kahlan;
 use Kahlan\Filter\Filters;
+use Kahlan\Reporter\Reporter;
 
 use Jamesst20\KahlanLaravel\Testing\LaravelTestCase;
 
@@ -29,11 +30,29 @@ class KahlanWrapper
         // Add stuffs to Kahlan testing scope
         Filters::apply($specs, 'run', function ($next) use ($specs, $instance) {
             $specs->suite()->root()->beforeEach($instance->refreshTestCaseInstance($specs));
-            // TODO: Make this run on the last afterEach !
-            $specs->suite()->root()->afterEach(function () {
-                $this->laravel->tearDown();
-            });
 
+            return $next();
+        });
+
+        // After each test, call tearDown on TestCase and remove garbaged stuffs from Kahlan testing scope
+        // Reporter#specEnd has the advantage over 'run' Filter to be executed after Kahlan's afterEach block.
+        Filters::apply($specs, 'reporters', function ($next) {
+            $reporters = $this->reporters();
+            $reporters->add('teardown', new class() extends Reporter
+            {
+                public function suiteStart($suite = null)
+                {
+                    $this->suite = $suite;
+                }
+
+                public function specEnd($log = null)
+                {
+                    $rootScope = $this->suite->suite()->root()->scope();
+                    $rootScope->laravel->tearDown();
+                    $rootScope->laravel = null;
+                    $rootScope->app = null;
+                }
+            });
             return $next();
         });
     }

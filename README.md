@@ -18,7 +18,7 @@ In a vanilla Laravel TestCase, we can access helpers by doing `$this->insertHelp
 
 In a kahlan environment, it is as simple as prefixing the method with `$this->laravel->insertHelperMethod`.
 
-Please note that `$this->laravel`and `$this->app` is not accessible in `beforeAll`, `afterAll`, `afterEach(yet)` callback but is as soon as in `beforeEach`.
+Please note that `$this->laravel`and `$this->app` is not accessible in `beforeAll`, `afterAll` callback but is as soon as in `beforeEach`.
 
 ## Example
 
@@ -122,9 +122,7 @@ Due to the current implementation of Laravel, there is no clean way to avoid the
 
 ## What is missing
 
-Being able to destroy in the very last `afterEach` callback the built in TestCase permitting in `afterEach` to access all TestCase methods.
-
-Waiting for some hints : https://github.com/kahlan/kahlan/issues/323
+You tell me :) !
 
 ## Credits
 
