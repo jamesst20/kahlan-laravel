@@ -1,0 +1,2 @@
+# Ignore test folder for GitHub releases
+/test-project      export-ignore
