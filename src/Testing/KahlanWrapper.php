@@ -9,7 +9,6 @@ use Dotenv\Dotenv;
 use Kahlan\Suite;
 use Kahlan\Cli\Kahlan;
 use Kahlan\Filter\Filters;
-use Kahlan\Reporter\Reporter;
 
 use Jamesst20\KahlanLaravel\Testing\LaravelTestCase;
 
@@ -29,40 +28,19 @@ class KahlanWrapper
 
         // Add stuffs to Kahlan testing scope
         Filters::apply($specs, 'run', function ($next) use ($specs, $instance) {
-            $specs->suite()->root()->beforeEach($instance->refreshTestCaseInstance($specs));
+            $specs->suite()->root()->beforeEach($instance->testSetup($specs));
+            $specs->suite()->root()->afterEach($instance->testTearDown($specs));
 
-            return $next();
-        });
-
-        // After each test, call tearDown on TestCase and remove garbaged stuffs from Kahlan testing scope
-        // Reporter#specEnd has the advantage over 'run' Filter to be executed after Kahlan's afterEach block.
-        Filters::apply($specs, 'reporters', function ($next) {
-            $reporters = $this->reporters();
-            $reporters->add('teardown', new class() extends Reporter
-            {
-                public function suiteStart($suite = null)
-                {
-                    $this->suite = $suite;
-                }
-
-                public function specEnd($log = null)
-                {
-                    $rootScope = $this->suite->suite()->root()->scope();
-                    $rootScope->laravel->tearDown();
-                    $rootScope->laravel = null;
-                    $rootScope->app = null;
-                }
-            });
             return $next();
         });
     }
 
     /**
      * Provide fresh application instance for each single spec.
-     * Create and add Laravel TestCase to Kahlan scope
+     * Create and add Laravel TestCase to Kahlan scope and call setUp() on TestCase
      * @return \Closure
      */
-    public function refreshTestCaseInstance($specs)
+    public function testSetup($specs)
     {
         $instance = $this;
         return function () use ($instance, $specs) {
@@ -77,6 +55,20 @@ class KahlanWrapper
             $rootScope->app = $laravel->app;
             $rootScope->laravel = $laravel;
         };
+    }
+
+    /**
+     * Destroy the TestCase for each single spec and clean up Kahlan scope.
+     * Calls tearDown on the TestCase to trigger all events associated.
+     * @return \Closure
+     */
+    public function testTearDown($specs) {
+        return function() use($specs) {
+            $rootScope = $specs->suite()->root()->scope();
+            $rootScope->laravel->tearDown();
+            $rootScope->laravel = null;
+            $rootScope->app = null;
+        };        
     }
 
     private static function tryRead($instance, $variable, $default = null)
