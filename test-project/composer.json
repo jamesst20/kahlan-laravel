@@ -17,18 +17,11 @@
         "beyondcode/laravel-dump-server": "^1.0",
         "filp/whoops": "^2.0",
         "fzaninotto/faker": "^1.4",
-        "kahlan/kahlan": "^4.5",
+        "jamesst20/kahlan-laravel": "^1.0",
         "mockery/mockery": "^1.0",
         "nunomaduro/collision": "^2.0",
-        "phpunit/phpunit": "^7.5",
-        "jamesst20/kahlan-laravel": "master-dev"
+        "phpunit/phpunit": "^7.5"
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/jamesst20/kahlan-laravel"
-        }
-    ],
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",

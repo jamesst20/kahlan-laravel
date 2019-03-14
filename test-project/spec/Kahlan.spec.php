@@ -114,3 +114,15 @@ describe("Environment variables", function() {
         expect(env("KAHLAN_SPECIFIC"))->toEqual("yes");
     });
 });
+
+describe("afterEach", function() {
+    afterEach(function() {
+        if ($this->laravel == null) {
+            throw new Exception("Failed asserting that afterEach callbacks are executed in right order");
+        }
+    });
+
+    it("assert anything to trigger afterEach", function() {
+        expect(true)->toEqual(true);
+    });
+});

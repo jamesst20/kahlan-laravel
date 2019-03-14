@@ -8,7 +8,7 @@ While it's true that you can use the vanilla Kahlan library, you cannot access t
 
 ## Compatibility
 
-Only **Laravel 5.8** is currently supported because this library relies on phpdotenv v3.0 shipped with Laravel. It also has been only tested with the latest **Kahlan** version (v4.5 as of now).
+Only **Laravel 5.8** is currently supported because this library relies on phpdotenv v3.0 shipped with Laravel. It also only the latest **Kahlan** version (v4.6 as of now) because it is depedent on the new `afterEach` behavior deployed on [v4.6](https://github.com/kahlan/kahlan/commit/439415be3fd2b950227c4e46b582bf853b3d5718).
 
 ## Usage
 
