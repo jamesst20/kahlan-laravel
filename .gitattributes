@@ -1,2 +1,4 @@
-# Ignore test folder for GitHub releases
+# Ignore stuffs for GitHub releases
+.*                 export-ignore
 /test-project      export-ignore
+README.md          export-ignore
